@@ -20,7 +20,7 @@ To understand the OpenThread terms and overall functionality, these guides are h
 
 ## A simple CLI:
 
-File: "meshcli.py"
+**File: "meshcli.py"**
 
 This extremely simple file allows to manually test the [OpenThread CLI](https://github.com/openthread/openthread/blob/c482301ec73b80985445102e4d0a936346172ddb/src/cli/README.md#state)
 
