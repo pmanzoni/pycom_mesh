@@ -4,7 +4,6 @@ This repository cointains examples of the use of Pycom's proprietary LoRa Mesh n
 
 * [Official Pymesh docs](https://docs.pycom.io/firmwareapi/pycom/network/lora/pymesh.html)
 * [Forum Pymesh announcements](https://forum.pycom.io/topic/4449/pymesh-updates)
-
 * [a simple Pymesh example](https://docs.pycom.io/tutorials/lora/lora-mesh.html)
 * [a more complete example](https://github.com/pycom/pycom-libraries/tree/master/lib/pymesh)
 
