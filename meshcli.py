@@ -6,6 +6,7 @@ pymesh.state()
 
 while True:
 	otcmd = input("cli: ")
+	otcmd = otcmd+"\n"
 	print(pymesh.cli(otcmd))
 
 
