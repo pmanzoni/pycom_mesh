@@ -26,4 +26,5 @@ This extremely simple file allows to manually test the [OpenThread CLI](https://
 
 This example https://codelabs.developers.google.com/codelabs/openthread-simulation/#2 can be replicated.
 
-
+Notes:
+* 'panid' seems that cannot be changed. It is fixed to '1234'
