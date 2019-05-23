@@ -24,7 +24,8 @@ To understand the OpenThread terms and overall functionality, these guides are h
 
 This extremely simple program allows to manually test the [OpenThread CLI](https://github.com/openthread/openthread/blob/c482301ec73b80985445102e4d0a936346172ddb/src/cli/README.md)
 
-This Google codelabs [example for OpenThread](https://codelabs.developers.google.com/codelabs/openthread-simulation/#2) can be replicated.
+A good start point is this Google codelabs [example for OpenThread](https://codelabs.developers.google.com/codelabs/openthread-simulation/#2).
 
-Notes:
-* 'panid' seems that cannot be changed. It is fixed to '1234'
+### Notes:
+* 'panid' cannot be changed. It is fixed to '1234'
+* no need for `ifconfig up` and `thread start` 
