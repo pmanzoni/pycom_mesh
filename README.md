@@ -4,10 +4,11 @@ This repository cointains examples of the use of Pycom's proprietary LoRa Mesh n
 
 * [Official Pymesh docs](https://docs.pycom.io/firmwareapi/pycom/network/lora/pymesh.html)
 * [Forum Pymesh announcements](https://forum.pycom.io/topic/4449/pymesh-updates)
+<!--
 * [a simple example](https://docs.pycom.io/tutorials/lora/lora-mesh.html)
 * [a more complete example](https://github.com/pycom/pycom-libraries/tree/master/lib/pymesh)
-
-The scripts included in this repository were created and tested using a [Lopy4](https://pycom.io/product/lopy4/), using the firmware release [**1.20.0.rc11**].
+-->
+The code included in this repository was created and tested using a [Lopy4](https://pycom.io/product/lopy4/), using the firmware release [**1.20.0.rc11**].
 
 ## Mesh basics
 The Pymesh LoRa Mesh is implemented using [OpenThread](https://openthread.io/guides/thread-primer).
