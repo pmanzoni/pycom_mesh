@@ -22,7 +22,7 @@ To understand the OpenThread terms and overall functionality, these guides are h
 
 **File: `"meshcli.py"`**
 
-This extremely simple file allows to manually test the [OpenThread CLI](https://github.com/openthread/openthread/blob/c482301ec73b80985445102e4d0a936346172ddb/src/cli/README.md#state)
+This extremely simple file allows to manually test the [OpenThread CLI](https://github.com/openthread/openthread/blob/c482301ec73b80985445102e4d0a936346172ddb/src/cli/README.md)
 
 This example https://codelabs.developers.google.com/codelabs/openthread-simulation/#2 can be replicated.
 
