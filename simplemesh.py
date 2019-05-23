@@ -21,6 +21,12 @@ class pyLED:
             time.sleep(d)
             pycom.rgbled(self.color['off'])
 
+def issingleton(mesh):
+    if "true" in mesh.cli('singleton'):
+        return True
+    else:
+        return False
+
 
 # init...
 
@@ -33,7 +39,7 @@ pycom.heartbeat(False)
 led = pyLED()
 
 
-print("Enabling Pymesh")
+print("enabling Pymesh...")
 lora = LoRa(mode=LoRa.LORA)# region=LoRa.EU868, frequency = 863000000, bandwidth=LoRa.BW_125KHZ, sf=7
 try:
     mesh = lora.Mesh()
@@ -43,33 +49,25 @@ except e:
 
 time.sleep(2)
 
-print("looping")
-while True:
-    cstate1 = mesh.cli('state')
-    cstate2 = PYMESHSTATE[mesh.state()]
-    print("%d: current state %s [%s]"%(time.time(), cstate1, cstate2))
-
-    if ("router" in cstate1) or ("leader" in cstate1) or ("child" in cstate1):
-        break
-    else:
-        time.sleep(2)
-
+cstate = 0 
+while not (cstate>1):
+    cstate = mesh.state()
+    print("%d: looping... [%s]"%(time.time(), PYMESHSTATE[cstate]))
+    time.sleep(2)
 
 led.flashLED("green")
-cstate1 = mesh.cli('state')
-cstate2 = PYMESHSTATE[mesh.state()]
-print("%d: current state %s [%s]"%(time.time(), cstate1, cstate2))
+cstate = mesh.state()
+print("%d: current state [%s]"%(time.time(), PYMESHSTATE[cstate]))
 
-
-while mesh.cli('singleton'):
-    cstate1 = mesh.cli('state')
-    cstate2 = PYMESHSTATE[mesh.state()]
-    print("%d: waiting for neighbors [%s]"%(time.time(), cstate2))
-    led.flashLED("red",1)
+while issingleton(mesh):
+    print(mesh.cli('singleton'))
+    cstate = mesh.state()
+    print("%d: waiting for neighbors [%s]"%(time.time(), PYMESHSTATE[cstate]))
+    led.flashLED("red", 1)
     time.sleep(2)
 
 
-led.flashLED("blue",1)
+led.flashLED("blue", 1)
 print("%d: found neighbor"%(time.time()))
 
 
