@@ -12,7 +12,6 @@ The code included in this repository was created and tested using a [Lopy4](http
 
 ## Mesh basics
 The Pymesh LoRa Mesh is implemented using [OpenThread](https://openthread.io/guides/thread-primer).
-
 To understand the OpenThread terms and overall functionality, these guides are highly recommended:
 
 * [What is Thread?](https://openthread.io/guides/thread-primer)
@@ -29,3 +28,12 @@ A good starting point is this [Google codelabs example](https://codelabs.develop
 ### Notes:
 * 'panid' cannot be changed. It is fixed to '1234'
 * no need for `ifconfig up` and `thread start` 
+
+
+## A simple mesh: [still being tested]
+
+**File: `"simplemesh.py"`**
+
+Based on this https://docs.pycom.io/tutorials/lora/lora-mesh.html
+
+A two nodes mesh. Once nodes see each other start sending "hello" messages using UDP.
