@@ -23,7 +23,7 @@ To understand the OpenThread terms and overall functionality, these guides are h
 **File: `"meshcli.py"`**
 
 This extremely simple program allows to manually test the [OpenThread CLI](https://github.com/openthread/openthread/blob/c482301ec73b80985445102e4d0a936346172ddb/src/cli/README.md). 
-A good starting point is this Google codelabs [example for OpenThread](https://codelabs.developers.google.com/codelabs/openthread-simulation/#2).
+A good starting point is this [Google codelabs example](https://codelabs.developers.google.com/codelabs/openthread-simulation/#2).
 
 ### Notes:
 * 'panid' cannot be changed. It is fixed to '1234'
