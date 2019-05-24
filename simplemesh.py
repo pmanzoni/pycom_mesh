@@ -39,13 +39,23 @@ pycom.heartbeat(False)
 led = pyLED()
 
 
+print("enabling Lora...")
+lora_active = False
+while not lora_active:
+    try:
+        lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
+        lora_active = True
+    except Exception as e:
+        print("DISASTER! exception opening Lora: "+str(e))
+        time.sleep(2)
+
+
 print("enabling Pymesh...")
-lora = LoRa(mode=LoRa.LORA)# region=LoRa.EU868, frequency = 863000000, bandwidth=LoRa.BW_125KHZ, sf=7
 try:
     mesh = lora.Mesh()
-except e:
-    print(e)
-    exit()
+except Exception as e:
+    print("DISASTER! exception creating mesh: "+str(e))
+    sys.exit()
 
 time.sleep(2)
 
