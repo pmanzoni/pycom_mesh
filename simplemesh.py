@@ -49,18 +49,17 @@ except e:
 
 time.sleep(2)
 
-cstate = 0 
-while not (cstate>1):
-    cstate = mesh.state()
+cstate = mesh.state()
+while (cstate<3):       # exits when either "PYMESH_ROLE_ROUTER" or "PYMESH_ROLE_LEADER"
     print("%d: looping... [%s]"%(time.time(), PYMESHSTATE[cstate]))
     time.sleep(2)
+    cstate = mesh.state()
 
 led.flashLED("green")
 cstate = mesh.state()
 print("%d: current state [%s]"%(time.time(), PYMESHSTATE[cstate]))
 
 while issingleton(mesh):
-    print(mesh.cli('singleton'))
     cstate = mesh.state()
     print("%d: waiting for neighbors [%s]"%(time.time(), PYMESHSTATE[cstate]))
     led.flashLED("red", 1)
@@ -69,14 +68,11 @@ while issingleton(mesh):
 
 led.flashLED("blue", 1)
 print("%d: found neighbor"%(time.time()))
-
-
 print(mesh.cli('neighbor table'))
-
-print("Pymesh node role: %d"%mesh.state())
 
 print("IPv6 unicast addresses: %s"%mesh.ipaddr())
 
+print("Leader data:")
 print(mesh.cli('leaderdata'))
 
 # print(mesh.cli('ping fe80:0:0:0:72b3:d549:95a2:c562 64 10 1'))
