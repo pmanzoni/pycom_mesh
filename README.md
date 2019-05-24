@@ -36,4 +36,5 @@ A good starting point is this [Google codelabs example](https://codelabs.develop
 
 Based on this https://docs.pycom.io/tutorials/lora/lora-mesh.html
 
-A two nodes mesh. Once nodes see each other start sending "hello" messages using UDP.
+A two nodes mesh. Execute the code in two different LoPys. The node will start building the mesh. 
+Once nodes see each other start, they start sending "hello" messages using UDP.
