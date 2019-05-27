@@ -39,7 +39,7 @@ Once nodes see each other start, they print the neighbours table and stop.
 
 ## A Lora mesh example: [still being tested]
 
-**File: `"loramesh.py"`**
+**Folder: `"loramesh"`; execute file `themain.py`**
 
 Based on this https://docs.pycom.io/tutorials/lora/lora-mesh.html
 
