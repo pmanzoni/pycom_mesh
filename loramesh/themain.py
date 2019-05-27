@@ -7,6 +7,7 @@
 # see the Pycom Licence v1.0 document supplied with this file, or
 # available at https://www.pycom.io/opensource/licensing
 #
+# Modified by PM, May 2019
 
 from network import LoRa
 import socket
@@ -16,35 +17,13 @@ import ubinascii
 import pycom
 import machine
 
-from loramesh import Loramesh
+from lorameshlib import Loramesh
 
-pycom.wifi_on_boot(False)
-pycom.heartbeat(False)
+PYMESHSTATE = ["PYMESH_ROLE_DISABLED", "PYMESH_ROLE_DETACHED", "PYMESH_ROLE_CHILD", "PYMESH_ROLE_ROUTER", "PYMESH_ROLE_LEADER"]
 
-lora = LoRa(mode=LoRa.LORA, region=LoRa.EU868, bandwidth=LoRa.BW_125KHZ, sf=7)
-MAC = str(ubinascii.hexlify(lora.mac()))[2:-1]
-print("LoRa MAC: %s"%MAC)
-
-mesh = Loramesh(lora)
-
-# waiting until it connected to Mesh network
-while True:
-    mesh.led_state()
-    print("%d: State %s, single %s"%(time.time(), mesh.cli('state'), mesh.cli('singleton')))
-    time.sleep(2)
-    if not mesh.is_connected():
-        continue
-
-    print('Neighbors found: %s'%mesh.neighbors())
-    break
-
-# create UDP socket
-s = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
-myport = 1234
-s.bind(myport)
-
-# handler responisble for receiving packets on UDP Pymesh socket
+# handler responsible for receiving packets on UDP Pymesh socket
 def receive_pack():
+    print("ENTERING UDP HANDLER")
     # listen for incomming packets
     while True:
         rcv_data, rcv_addr = s.recvfrom(128)
@@ -62,15 +41,51 @@ def receive_pack():
                 pass
         mesh.blink(7, .3)
 
+
+
+pycom.wifi_on_boot(False)
+pycom.heartbeat(False)
+
+print("enabling Lora...")
+lora_active = False
+while not lora_active:
+    try:
+        lora = LoRa(mode=LoRa.LORA, region=LoRa.EU868, bandwidth=LoRa.BW_125KHZ, sf=7)
+        lora_active = True
+    except Exception as e:
+        print("DISASTER! exception opening Lora: "+str(e))
+        time.sleep(2)
+MAC = str(ubinascii.hexlify(lora.mac()))[2:-1]
+print("LoRa MAC: %s"%MAC)
+
+mesh = Loramesh(lora)
+
+
+# waiting until it is connected to Mesh network
+cstate = mesh._state_update()
+while (cstate<2):       # exits when either "PYMESH_ROLE_CHILD", "PYMESH_ROLE_ROUTER" or "PYMESH_ROLE_LEADER"
+    mesh.led_state()
+    print("%d: looping... [%s]"%(time.time(), PYMESHSTATE[cstate]))
+    time.sleep(2)
+    cstate = mesh._state_update()
+
+
+print('Neighbors found: %s'%mesh.neighbors())
+
+# create UDP socket
+s = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
+myport = 1234
+s.bind(myport)
+
 pack_num = 1
 msg = "Hello World! MAC: " + MAC + ", pack: "
 ip = mesh.ip()
-mesh.mesh.rx_cb(receive_pack)
+mesh.mesh.rx_cb(receive_pack, s)
 
 # infinite main loop
 while True:
     mesh.led_state()
-    print("%d: State %s, single %s, IP %s"%(time.time(), mesh.cli('state'), mesh.cli('singleton'), mesh.ip()))
+    print("%d: state: %s, is singleton: %s, IP: %s"%(time.time(), mesh.cli('state'), mesh.cli('singleton'), mesh.ip()))
 
     # check if topology changes, maybe RLOC IPv6 changed
     new_ip = mesh.ip()
