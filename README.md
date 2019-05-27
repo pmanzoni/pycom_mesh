@@ -30,11 +30,16 @@ A good starting point is this [Google codelabs example](https://codelabs.develop
 * no need for `ifconfig up` and `thread start` 
 
 
-## A simple mesh: [still being tested]
+## A simple mesh:
 
 **File: `"simplemesh.py"`**
 
+A two nodes mesh. Execute the code in two different LoPys. The node will start building the mesh. 
+Once nodes see each other start, they print the neighbours table and stop.
+
+## A Lora mesh example: [still being tested]
+
+**File: `"loramesh.py"`**
+
 Based on this https://docs.pycom.io/tutorials/lora/lora-mesh.html
 
-A two nodes mesh. Execute the code in two different LoPys. The node will start building the mesh. 
-Once nodes see each other start, they start sending "hello" messages using UDP.
