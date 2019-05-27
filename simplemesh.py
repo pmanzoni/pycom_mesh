@@ -43,12 +43,11 @@ print("enabling Lora...")
 lora_active = False
 while not lora_active:
     try:
-        lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
+        lora = LoRa(mode=LoRa.LORA, region=LoRa.EU868)
         lora_active = True
     except Exception as e:
         print("DISASTER! exception opening Lora: "+str(e))
         time.sleep(2)
-
 
 print("enabling Pymesh...")
 try:
@@ -60,7 +59,7 @@ except Exception as e:
 time.sleep(2)
 
 cstate = mesh.state()
-while (cstate<3):       # exits when either "PYMESH_ROLE_ROUTER" or "PYMESH_ROLE_LEADER"
+while (cstate<2):       # exits when either "PYMESH_ROLE_CHILD", "PYMESH_ROLE_ROUTER" or "PYMESH_ROLE_LEADER"
     print("%d: looping... [%s]"%(time.time(), PYMESHSTATE[cstate]))
     time.sleep(2)
     cstate = mesh.state()

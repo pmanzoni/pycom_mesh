@@ -7,7 +7,7 @@ lora_active = False
 
 while not lora_active:
     try:
-        lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
+        lora = LoRa(mode=LoRa.LORA, region=LoRa.EU868)
         lora_active = True
     except Exception as e:
         print("DISASTER! exception opening Lora: "+str(e))
