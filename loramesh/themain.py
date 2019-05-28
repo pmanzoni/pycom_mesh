@@ -26,22 +26,21 @@ PYMESHSTATE = ["PYMESH_ROLE_DISABLED", "PYMESH_ROLE_DETACHED", "PYMESH_ROLE_CHIL
 def receive_pack(s):
     global device_lora_mac
 
-    while True:
-        rcv_data, rcv_addr = s.recvfrom(128)
-        if len(rcv_data) > 0:
-            rcv_ip   = rcv_addr[0]
-            rcv_port = rcv_addr[1]
-            print('received %d bytes from %s (port %d)' % (len(rcv_data), rcv_ip, rcv_port))
-            print("\t> %s" % rcv_data)
+    rcv_data, rcv_addr = s.recvfrom(128)
+    if len(rcv_data) > 0:
+        rcv_ip   = rcv_addr[0]
+        rcv_port = rcv_addr[1]
+        print('received %d bytes from %s (port %d)' % (len(rcv_data), rcv_ip, rcv_port))
+        print("\t> %s" % rcv_data)
 
-            # Sends an ACK packet if it was an "Hello" packet
-            if rcv_data.startswith("Hello"):
-                try:
-                    s.sendto('ACK ' + device_lora_mac + ' ' + str(rcv_data)[2:-1], (rcv_ip, rcv_port))
-                except Exception as e:
-                    print("inside 'receive_pack()': %s" % str(e))
-                    pass
-            mesh.blink(7, .3)
+        # Sends an ACK packet if it was an "Hello" packet
+        if rcv_data.startswith("Hello"):
+            try:
+                s.sendto('ACK ' + device_lora_mac + ' ' + str(rcv_data)[2:-1], (rcv_ip, rcv_port))
+            except Exception as e:
+                print("inside 'receive_pack()': %s" % str(e))
+                pass
+        mesh.blink(7, .3)
 
 
 ########################################
