@@ -21,6 +21,8 @@ from lorameshlib import Loramesh
 
 UDPPORT = 1234
 PYMESHSTATE = ["PYMESH_ROLE_DISABLED", "PYMESH_ROLE_DETACHED", "PYMESH_ROLE_CHILD", "PYMESH_ROLE_ROUTER", "PYMESH_ROLE_LEADER"]
+MESHSTATE = {"offline": "PYMESH_ROLE_OFFLINE", "disabled": "PYMESH_ROLE_DISABLED", "detached": "PYMESH_ROLE_DETACHED", "child": "PYMESH_ROLE_CHILD", "router": "PYMESH_ROLE_ROUTER", "leader": "PYMESH_ROLE_LEADER"}
+
 
 # Handler responsible for receiving packets on UDP Pymesh socket
 def receive_pack(s):
@@ -30,7 +32,7 @@ def receive_pack(s):
     if len(rcv_data) > 0:
         rcv_ip   = rcv_addr[0]
         rcv_port = rcv_addr[1]
-        print('received %d bytes from %s (port %d)' % (len(rcv_data), rcv_ip, rcv_port))
+        print('%d: received %d bytes from %s (port %d)' % (time.time(), len(rcv_data), rcv_ip, rcv_port))
         print("\t> %s" % rcv_data)
 
         # Sends an ACK packet if it was an "Hello" packet
@@ -55,8 +57,9 @@ while not lora_active:
         lora = LoRa(mode=LoRa.LORA, region=LoRa.EU868, bandwidth=LoRa.BW_125KHZ, sf=7)
         lora_active = True
     except Exception as e:
-        print("DISASTER! exception opening Lora: "+str(e))
+        print("DISASTER! exception opening Lora: "+str(e)+"... retrying.")
         time.sleep(2)
+        print("")
 device_lora_mac = str(ubinascii.hexlify(lora.mac()))[2:-1]
 print("LoRa MAC: %s"%device_lora_mac)
 
@@ -66,13 +69,12 @@ mesh = Loramesh(lora)
 cstate = mesh._state_update()
 while (cstate<2):       # exits when either "PYMESH_ROLE_CHILD", "PYMESH_ROLE_ROUTER" or "PYMESH_ROLE_LEADER"
     mesh.led_state()
-    print("%d: waiting... [%s]"%(time.time(), PYMESHSTATE[cstate]))
+    print("%d: %s ... waiting." % (time.time(), PYMESHSTATE[cstate]))
     time.sleep(2)
     cstate = mesh._state_update()
 
-print('Current status: %s'  % PYMESHSTATE[cstate])
-
 node_ip_addr = mesh.ip()
+print("%d: connected as %s. IP: %s" % (time.time(), PYMESHSTATE[cstate], node_ip_addr))
 
 # create UDP socket
 s = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
@@ -89,7 +91,7 @@ while True:
         single = "is singleton"
     else:
         single = "not singleton"
-    print("%d: state: %s, IP: %s [%s]" % (time.time(), c_state, node_ip_addr, single))
+    print("%d: %s, IP: %s [%s]" % (time.time(), MESHSTATE[c_state], node_ip_addr, single))
 
     # check if topology changes, maybe RLOC IPv6 changed
     new_node_ip_addr = mesh.ip()
@@ -99,7 +101,7 @@ while True:
 
     # update neighbors list
     neigbors = mesh.neighbors_ip()
-    print("%d: %d neighbors, IPv6 list: %s" % (time.time(),len(neigbors), neigbors))
+    print("%d: neighbors = %d; IPv6 list: %s" % (time.time(), len(neigbors), neigbors))
 
     # send PING and UDP packets to all neighbors
     for neighbor in neigbors:
@@ -107,10 +109,10 @@ while True:
         try:
             tping = mesh.ping(neighbor)
             if tping > 0:
-                print('Ping OK from neighbor %s'%neighbor)
+                print('%d: ping OK from neighbor %s' % (time.time(), neighbor))
                 mesh.blink(10, .1)
             else:
-                print('Ping not received from neighbor %s'%neighbor)
+                print('%d: ping not received from neighbor %s' % (time.time(), neighbor))
         except Exception as e:
             print("exception doing PING: "+str(e))
             pass
@@ -120,7 +122,7 @@ while True:
         pack_num = pack_num + 1
         try:
             s.sendto("Hello World! from node: " + device_lora_mac + ", pack: " + str(pack_num), (neighbor, UDPPORT))
-            print('Sent message to %s' % (neighbor))
+            print('%d: sent UDP message to %s' % (time.time(), neighbor))
         except Exception as e:
             print("exception sending packet: "+str(e))
             pass
