@@ -37,7 +37,7 @@ A good starting point is this [Google codelabs example](https://codelabs.develop
 A two nodes mesh. Execute the code in two different LoPys. The node will start building the mesh. 
 Once nodes see each other start, they print the neighbours table and stop.
 
-## A Lora mesh example: [still being tested]
+## A Lora mesh example:
 
 **Folder: `"loramesh"`; execute file `themain.py`**
 
