@@ -27,6 +27,23 @@ def issingleton(mesh):
     else:
         return False
 
+# handler responisble for receiving packets on UDP Pymesh socket
+def receive_pack():
+    while True:
+        rcv_data, rcv_addr = s.recvfrom(128)
+        if len(rcv_data) == 0:
+            break
+        rcv_ip = rcv_addr[0]
+        rcv_port = rcv_addr[1]
+        print('Incoming %d bytes from %s (port %d)'%(len(rcv_data), rcv_ip, rcv_port))
+        print(rcv_data)
+        # could send some ACK pack:
+        if rcv_data.startswith("Hello"):
+            try:
+                s.sendto('ACK ' + MAC + ' ' + str(rcv_data)[2:-1], (rcv_ip, rcv_port))
+            except Exception:
+                pass
+        mesh.blink(7, .3)
 
 # init...
 
@@ -83,5 +100,3 @@ print("IPv6 unicast addresses: %s"%mesh.ipaddr())
 
 print("Leader data:")
 print(mesh.cli('leaderdata'))
-
-# print(mesh.cli('ping fe80:0:0:0:72b3:d549:95a2:c562 64 10 1'))
