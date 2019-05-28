@@ -41,5 +41,5 @@ Once nodes see each other start, they print the neighbours table and stop.
 
 **Folder: `"loramesh"`; execute file `themain.py`**
 
-Based on this https://docs.pycom.io/tutorials/lora/lora-mesh.html
+Based on this https://docs.pycom.io/tutorials/lora/lora-mesh.html Once the mesh is created every node sends a PING and UDP packets to all neighbors.
 
